@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int         @id @default(autoincrement())
+  name             String      @db.String
+  email            String      @unique
+  blockchainAddress String      @unique
+  metamaskAddress   String      @unique
+  createdAt         DateTime    @default(now()) @map("created_at")
+  campaigns         Campaign[]
+  donations         Donation[]
+
+  @@map("users")
+}
+
+model Campaign {
+  id               Int         @id @default(autoincrement())
+  userId           Int         @map("user_id")
+  title            String
+  description      String
+  goalAmount       Decimal     @map("goal_amount")
+  collectedAmount  Decimal     @default(0) @map("collected_amount")
+  blockchainAddress String      @unique
+  status           String      @default("active")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  donations        Donation[]
+
+  @@map("campaigns")
+}
+
+model Donation {
+  id              Int       @id @default(autoincrement())
+  campaignId      Int       @map("campaign_id")
+  donorId         Int?      @map("donor_id")
+  amount          Decimal
+  transactionHash String    @unique @map("transaction_hash")
+  donatedAt       DateTime  @default(now()) @map("donated_at")
+  campaign        Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  donor           User?     @relation(fields: [donorId], references: [id], onDelete: SetNull)
+
+  @@map("donations")
+}
