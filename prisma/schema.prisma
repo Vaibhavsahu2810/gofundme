@@ -9,15 +9,52 @@ datasource db {
 
 model User {
   id                Int         @id @default(autoincrement())
-  name             String      @db.String
+  name             String      @unique
   email            String      @unique
-  blockchainAddress String      @unique
-  metamaskAddress   String      @unique
-  createdAt         DateTime    @default(now()) @map("created_at")
-  campaigns         Campaign[]
-  donations         Donation[]
+  password         String?
+  blockchainAddress String?     @unique
+  metamaskAddress   String?     @unique
+  emailVerified    DateTime?
+  verificationToken String?     @unique
+  resetToken       String?     @unique
+  resetTokenExpiry DateTime?
+  createdAt        DateTime    @default(now()) @map("created_at")
+  campaigns        Campaign[]
+  donations        Donation[]
+  accounts         Account[]
+  sessions         Session[]
 
   @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model Campaign {
