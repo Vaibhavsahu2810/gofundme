@@ -11,18 +11,18 @@ export async function GET(request: Request) {
     if (!token) {
       return NextResponse.json(
         { error: "Invalid verification token" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const user = await prisma.user.findUnique({
-      where: { verificationToken: token }
+      where: { verificationToken: token },
     });
 
     if (!user) {
       return NextResponse.json(
         { error: "Invalid verification token" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     console.error("Verification error:", error);
     return NextResponse.json(
       { error: "Failed to verify email" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

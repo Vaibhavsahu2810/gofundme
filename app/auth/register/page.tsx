@@ -11,23 +11,33 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
-const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[0-9]/, "Password must contain at least 1 number")
-    .regex(/[^a-zA-Z0-9]/, "Password must contain at least 1 special character"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[0-9]/, "Password must contain at least 1 number")
+      .regex(
+        /[^a-zA-Z0-9]/,
+        "Password must contain at least 1 special character",
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
-  
-  const { register, handleSubmit, formState: { errors } } = useForm({
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(registerSchema),
   });
 
@@ -103,7 +113,9 @@ export default function RegisterPage() {
                 className="bg-white/5 border-white/10 focus:border-primary"
               />
               {errors.name && (
-                <p className="text-sm text-destructive">{errors.name.message as string}</p>
+                <p className="text-sm text-destructive">
+                  {errors.name.message as string}
+                </p>
               )}
             </div>
 
@@ -115,7 +127,9 @@ export default function RegisterPage() {
                 className="bg-white/5 border-white/10 focus:border-primary"
               />
               {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message as string}</p>
+                <p className="text-sm text-destructive">
+                  {errors.email.message as string}
+                </p>
               )}
             </div>
 
@@ -127,7 +141,9 @@ export default function RegisterPage() {
                 className="bg-white/5 border-white/10 focus:border-primary"
               />
               {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message as string}</p>
+                <p className="text-sm text-destructive">
+                  {errors.password.message as string}
+                </p>
               )}
             </div>
 
@@ -139,15 +155,13 @@ export default function RegisterPage() {
                 className="bg-white/5 border-white/10 focus:border-primary"
               />
               {errors.confirmPassword && (
-                <p className="text-sm text-destructive">{errors.confirmPassword.message as string}</p>
+                <p className="text-sm text-destructive">
+                  {errors.confirmPassword.message as string}
+                </p>
               )}
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
@@ -162,10 +176,7 @@ export default function RegisterPage() {
             className="text-center text-sm text-muted-foreground"
           >
             Already have an account?{" "}
-            <Link
-              href="/auth/login"
-              className="text-primary hover:underline"
-            >
+            <Link href="/auth/login" className="text-primary hover:underline">
               Sign in
             </Link>
           </motion.div>

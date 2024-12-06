@@ -4,7 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
@@ -13,10 +20,14 @@ import { motion } from "framer-motion";
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
   description: z.string().min(20, "Description must be at least 20 characters"),
-  goalAmount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0.01, {
-    message: "Goal amount must be at least 0.01 ETH",
-  }),
-  blockchainAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address"),
+  goalAmount: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0.01, {
+      message: "Goal amount must be at least 0.01 ETH",
+    }),
+  blockchainAddress: z
+    .string()
+    .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address"),
 });
 
 export default function CreateCampaign() {
@@ -99,7 +110,12 @@ export default function CreateCampaign() {
               <FormItem>
                 <FormLabel>Goal Amount (ETH)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" placeholder="0.00" {...field} />
+                  <Input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

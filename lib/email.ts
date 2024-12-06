@@ -10,10 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendVerificationEmail(
-  email: string,
-  token: string
-) {
+export async function sendVerificationEmail(email: string, token: string) {
   const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify?token=${token}`;
 
   await transporter.sendMail({
@@ -28,10 +25,7 @@ export async function sendVerificationEmail(
   });
 }
 
-export async function sendPasswordResetEmail(
-  email: string,
-  token: string
-) {
+export async function sendPasswordResetEmail(email: string, token: string) {
   const resetUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${token}`;
 
   await transporter.sendMail({

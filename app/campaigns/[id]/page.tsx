@@ -60,8 +60,11 @@ export default function CampaignDetail() {
 
     setIsLoading(true);
     try {
-      const tx = await sendTransaction(campaign.blockchainAddress, donationAmount);
-      
+      const tx = await sendTransaction(
+        campaign.blockchainAddress,
+        donationAmount,
+      );
+
       await fetch("/api/donations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,7 +79,7 @@ export default function CampaignDetail() {
         title: "Thank you!",
         description: "Your donation has been processed successfully.",
       });
-      
+
       setDonationAmount("");
     } catch (error) {
       console.error("Error processing donation:", error);
@@ -93,7 +96,7 @@ export default function CampaignDetail() {
   if (!campaign) return null;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="max-w-4xl mx-auto px-4 py-8"
@@ -101,14 +104,20 @@ export default function CampaignDetail() {
       <Card>
         <CardHeader>
           <CardTitle>{campaign.title}</CardTitle>
-          <p className="text-sm text-muted-foreground">by {campaign.user.name}</p>
+          <p className="text-sm text-muted-foreground">
+            by {campaign.user.name}
+          </p>
         </CardHeader>
         <CardContent className="space-y-6">
           <p>{campaign.description}</p>
-          
+
           <div className="space-y-2">
-            <Progress 
-              value={(Number(campaign.collectedAmount) / Number(campaign.goalAmount)) * 100} 
+            <Progress
+              value={
+                (Number(campaign.collectedAmount) /
+                  Number(campaign.goalAmount)) *
+                100
+              }
             />
             <div className="flex justify-between text-sm">
               <span>{campaign.collectedAmount} ETH raised</span>

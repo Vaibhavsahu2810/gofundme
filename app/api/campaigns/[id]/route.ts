@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const campaign = await prisma.campaign.findUnique({
@@ -26,7 +26,7 @@ export async function GET(
     if (!campaign) {
       return NextResponse.json(
         { error: "Campaign not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -35,7 +35,7 @@ export async function GET(
     console.error("Failed to fetch campaign:", error);
     return NextResponse.json(
       { error: "Failed to fetch campaign" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

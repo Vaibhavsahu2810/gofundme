@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const envSchema = z.object({
   // Database
@@ -15,7 +15,7 @@ const envSchema = z.object({
   SMTP_USER: z.string().email(),
   SMTP_PASSWORD: z.string().min(1),
   SMTP_FROM: z.string().email(),
-  SMTP_SECURE: z.string().transform((v) => v === 'true'),
+  SMTP_SECURE: z.string().transform((v) => v === "true"),
 
   // Web3
   NEXT_PUBLIC_NETWORK_ID: z.string(),
@@ -33,9 +33,11 @@ const envSchema = z.object({
   COOKIE_SECRET: z.string().min(32),
 
   // Feature Flags
-  NEXT_PUBLIC_ENABLE_EMAIL_VERIFICATION: z.string().transform((v) => v === 'true'),
-  NEXT_PUBLIC_ENABLE_PASSWORD_RESET: z.string().transform((v) => v === 'true'),
-  NEXT_PUBLIC_MAINTENANCE_MODE: z.string().transform((v) => v === 'true'),
+  NEXT_PUBLIC_ENABLE_EMAIL_VERIFICATION: z
+    .string()
+    .transform((v) => v === "true"),
+  NEXT_PUBLIC_ENABLE_PASSWORD_RESET: z.string().transform((v) => v === "true"),
+  NEXT_PUBLIC_MAINTENANCE_MODE: z.string().transform((v) => v === "true"),
 });
 
 export const env = envSchema.parse(process.env);

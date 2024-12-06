@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     console.error("Failed to create donation:", error);
     return NextResponse.json(
       { error: "Failed to create donation" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

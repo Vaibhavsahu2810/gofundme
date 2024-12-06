@@ -17,8 +17,9 @@ export default function Home() {
           Empowering Change Through Blockchain
         </h1>
         <p className="text-lg text-muted-foreground mb-8">
-          Start or support meaningful campaigns using secure blockchain technology.
-          Make a difference with transparent, decentralized fundraising.
+          Start or support meaningful campaigns using secure blockchain
+          technology. Make a difference with transparent, decentralized
+          fundraising.
         </p>
         <div className="flex gap-4 justify-center">
           <Link href="/create-campaign">

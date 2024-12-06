@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     console.error("Failed to create campaign:", error);
     return NextResponse.json(
       { error: "Failed to create campaign" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -47,7 +47,7 @@ export async function GET() {
     console.error("Failed to fetch campaigns:", error);
     return NextResponse.json(
       { error: "Failed to fetch campaigns" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

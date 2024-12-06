@@ -21,8 +21,12 @@ const loginSchema = z.object({
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  
-  const { register, handleSubmit, formState: { errors } } = useForm({
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(loginSchema),
   });
 
@@ -98,7 +102,9 @@ export default function LoginPage() {
                 className="bg-white/5 border-white/10 focus:border-primary"
               />
               {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message as string}</p>
+                <p className="text-sm text-destructive">
+                  {errors.email.message as string}
+                </p>
               )}
             </div>
 
@@ -110,15 +116,13 @@ export default function LoginPage() {
                 className="bg-white/5 border-white/10 focus:border-primary"
               />
               {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message as string}</p>
+                <p className="text-sm text-destructive">
+                  {errors.password.message as string}
+                </p>
               )}
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}

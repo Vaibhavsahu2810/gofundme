@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
@@ -57,14 +63,21 @@ export default function Campaigns() {
               <CardHeader>
                 <CardTitle>{campaign.title}</CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  by {campaign.user.name} • {formatDistanceToNow(new Date(campaign.createdAt))} ago
+                  by {campaign.user.name} •{" "}
+                  {formatDistanceToNow(new Date(campaign.createdAt))} ago
                 </p>
               </CardHeader>
               <CardContent>
-                <p className="text-sm mb-4">{campaign.description.slice(0, 150)}...</p>
+                <p className="text-sm mb-4">
+                  {campaign.description.slice(0, 150)}...
+                </p>
                 <div className="space-y-2">
-                  <Progress 
-                    value={(Number(campaign.collectedAmount) / Number(campaign.goalAmount)) * 100} 
+                  <Progress
+                    value={
+                      (Number(campaign.collectedAmount) /
+                        Number(campaign.goalAmount)) *
+                      100
+                    }
                   />
                   <div className="flex justify-between text-sm">
                     <span>{campaign.collectedAmount} ETH raised</span>

@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
-import { Moon, Sun } from "lucide-react"
-import Link from "next/link"
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
+import Link from "next/link";
 
 export function Navbar() {
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme } = useTheme();
 
   return (
     <nav className="border-b">
@@ -17,7 +17,7 @@ export function Navbar() {
               BlockFund
             </Link>
           </div>
-          
+
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               <Link href="/campaigns" className="hover:text-primary">
@@ -46,5 +46,5 @@ export function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
