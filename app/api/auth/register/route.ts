@@ -1,73 +1,44 @@
-import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { hash } from "bcryptjs";
-import { z } from "zod";
-import { sendVerificationEmail } from "@/lib/email";
-import crypto from "crypto";
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import prisma from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
 
-const prisma = new PrismaClient();
-
-const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[0-9]/, "Password must contain at least 1 number")
-    .regex(
-      /[^a-zA-Z0-9]/,
-      "Password must contain at least 1 special character",
-    ),
-});
+const RegisterSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  name: z.string(),
+  country: z.string(),
+  postcode: z.string(),
+})
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const validation = registerSchema.safeParse(body);
+    const body = await request.json()
+    const { email, password, name, country, postcode } = RegisterSchema.parse(body)
 
-    if (!validation.success) {
-      return NextResponse.json(
-        { error: validation.error.errors[0].message },
-        { status: 400 },
-      );
-    }
-
-    const { name, email, password } = validation.data;
-
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
+    const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
-      return NextResponse.json(
-        { error: "Email already registered" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'User already exists' }, { status: 400 })
     }
 
-    const hashedPassword = await hash(password, 12);
-    const verificationToken = crypto.randomBytes(32).toString("hex");
-
+    const hashedPassword = await bcrypt.hash(password, 10)
     const user = await prisma.user.create({
       data: {
-        name,
         email,
         password: hashedPassword,
-        verificationToken,
+        name,
+        country,
+        postcode,
+        walletAddress: '', // You might want to generate this or let the user provide it
       },
-    });
+    })
 
-    await sendVerificationEmail(email, verificationToken);
-
-    return NextResponse.json({
-      message:
-        "Registration successful. Please check your email to verify your account.",
-    });
+    return NextResponse.json({ message: 'User registered successfully', userId: user.id }, { status: 201 })
   } catch (error) {
-    console.error("Registration error:", error);
-    return NextResponse.json(
-      { error: "Failed to register user" },
-      { status: 500 },
-    );
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.errors }, { status: 400 })
+    }
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+
