@@ -1,37 +1,42 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { motion } from 'framer-motion'
 
 export default function Home() {
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-2">
+      <motion.h1 
+        className="text-4xl md:text-6xl font-bold mb-8 text-center"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-center max-w-3xl"
       >
-        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
-          Empowering Change Through Blockchain
-        </h1>
-        <p className="text-lg text-muted-foreground mb-8">
-          Start or support meaningful campaigns using secure blockchain
-          technology. Make a difference with transparent, decentralized
-          fundraising.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Link href="/create-campaign">
-            <Button size="lg">Start a Campaign</Button>
-          </Link>
-          <Link href="/campaigns">
-            <Button size="lg" variant="outline">
-              Explore Campaigns
-            </Button>
-          </Link>
-        </div>
+        Welcome to FundRaiser
+      </motion.h1>
+      <motion.p 
+        className="text-xl mb-8 text-center max-w-2xl"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        Create and manage fundraisers for various causes. Join our community and make a difference today!
+      </motion.p>
+      <motion.div 
+        className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <Button asChild size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+          <Link href="/dashboard">Go to Dashboard</Link>
+        </Button>
+        <Button asChild variant="outline" size="lg">
+          <Link href="/campaign">Start a Campaign</Link>
+        </Button>
       </motion.div>
     </div>
-  );
+  )
 }
+

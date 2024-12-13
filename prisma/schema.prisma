@@ -3,85 +3,82 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id                Int         @id @default(autoincrement())
-  name             String      @unique
-  email            String      @unique
-  password         String?
-  blockchainAddress String?     @unique
-  metamaskAddress   String?     @unique
-  emailVerified    DateTime?
-  verificationToken String?     @unique
-  resetToken       String?     @unique
-  resetTokenExpiry DateTime?
-  createdAt        DateTime    @default(now()) @map("created_at")
-  campaigns        Campaign[]
-  donations        Donation[]
-  accounts         Account[]
-  sessions         Session[]
-
-  @@map("users")
+  id            String      @id @default(cuid())
+  email         String      @unique
+  name          String
+  password      String
+  country       String
+  postcode      String
+  walletAddress String
+  createdAt     DateTime    @default(now())
+  fundraisers   Fundraiser[]
+  donations     Donation[]
+  comments      Comment[]
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            Int
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       Int
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
-}
-
-model Campaign {
-  id               Int         @id @default(autoincrement())
-  userId           Int         @map("user_id")
-  title            String
-  description      String
-  goalAmount       Decimal     @map("goal_amount")
-  collectedAmount  Decimal     @default(0) @map("collected_amount")
-  blockchainAddress String      @unique
-  status           String      @default("active")
-  createdAt        DateTime    @default(now()) @map("created_at")
-  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  donations        Donation[]
-
-  @@map("campaigns")
+model Fundraiser {
+  id              String            @id @default(cuid())
+  organizerId     String
+  title           String
+  story           String
+  category        FundraiserCategory
+  target          Float
+  currentAmount   Float             @default(0)
+  country         String
+  postcode        String
+  status          FundraiserStatus  @default(ACTIVE)
+  images          String[]
+  createdAt       DateTime          @default(now())
+  transactionHash String?
+  organizer       User              @relation(fields: [organizerId], references: [id])
+  donations       Donation[]
+  comments        Comment[]
 }
 
 model Donation {
-  id              Int       @id @default(autoincrement())
-  campaignId      Int       @map("campaign_id")
-  donorId         Int?      @map("donor_id")
-  amount          Decimal
-  transactionHash String    @unique @map("transaction_hash")
-  donatedAt       DateTime  @default(now()) @map("donated_at")
-  campaign        Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  donor           User?     @relation(fields: [donorId], references: [id], onDelete: SetNull)
-
-  @@map("donations")
+  id              String     @id @default(cuid())
+  fundraiserId    String
+  donorId         String
+  amount          Float
+  message         String?
+  isAnonymous     Boolean    @default(false)
+  transactionHash String
+  createdAt       DateTime   @default(now())
+  fundraiser      Fundraiser @relation(fields: [fundraiserId], references: [id])
+  donor           User       @relation(fields: [donorId], references: [id])
 }
+
+model Comment {
+  id           String     @id @default(cuid())
+  fundraiserId String
+  userId       String
+  message      String
+  createdAt    DateTime   @default(now())
+  fundraiser   Fundraiser @relation(fields: [fundraiserId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+}
+
+enum FundraiserCategory {
+  MEDICAL
+  MEMORIAL
+  EMERGENCY
+  CHARITY
+  EDUCATION
+  ANIMALS
+  BUSINESS
+  COMMUNITY
+  COMPETITIONS
+  CREATIVE
+}
+
+enum FundraiserStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
