@@ -4,38 +4,38 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://myuser:mypassword@localhost:5432/mydatabase?schema=public"
 }
 
 model User {
-  id            String      @id @default(cuid())
-  email         String      @unique
+  id            String       @id @default(cuid())
+  email         String       @unique
   name          String
   password      String
   country       String
   postcode      String
   walletAddress String
-  createdAt     DateTime    @default(now())
+  createdAt     DateTime     @default(now())
   fundraisers   Fundraiser[]
   donations     Donation[]
   comments      Comment[]
 }
 
 model Fundraiser {
-  id              String            @id @default(cuid())
+  id              String             @id @default(cuid())
   organizerId     String
   title           String
   story           String
   category        FundraiserCategory
   target          Float
-  currentAmount   Float             @default(0)
+  currentAmount   Float              @default(0)
   country         String
   postcode        String
-  status          FundraiserStatus  @default(ACTIVE)
+  status          FundraiserStatus   @default(ACTIVE)
   images          String[]
-  createdAt       DateTime          @default(now())
+  createdAt       DateTime           @default(now())
   transactionHash String?
-  organizer       User              @relation(fields: [organizerId], references: [id])
+  organizer       User               @relation(fields: [organizerId], references: [id])
   donations       Donation[]
   comments        Comment[]
 }
@@ -81,4 +81,3 @@ enum FundraiserStatus {
   COMPLETED
   CANCELLED
 }
-
